@@ -155,9 +155,9 @@ class ServiceTest extends \BBTestCase {
         );
 
 
-        $reqMock = $this->getMockBuilder('\Box_Request')->getMock();
-        $reqMock->expects($this->atLeastOnce())
-            ->method('getClientAddress')
+        $toolsMock = $this->getMockBuilder('\Box_Tools')->getMock();
+        $toolsMock->expects($this->atLeastOnce())
+            ->method('getIpv4')
             ->willReturn($clientIp);
 
         $di = new \Box_Di();
@@ -166,7 +166,7 @@ class ServiceTest extends \BBTestCase {
                 return $modConfig;
             }
         });
-        $di['request'] = $reqMock;
+        $di['tools'] = $toolsMock;
 
         $boxEventMock = $this->getMockBuilder('\Box_Event')->disableOriginalConstructor()
             ->getMock();
@@ -175,7 +175,7 @@ class ServiceTest extends \BBTestCase {
             ->willReturn($di);
 
         $this->expectException(\Box_Exception::class);
-        $this->expectExceptionMessage(sprintf("Your IP addresss (%s) is blocked. Please contact our support to lift your block.", $clientIp), 403);
+        $this->expectExceptionMessage(sprintf("IP %s is blocked", $clientIp), 403);
         $this->service->isBlockedIp($boxEventMock);
     }
 
@@ -188,9 +188,9 @@ class ServiceTest extends \BBTestCase {
         );
 
 
-        $reqMock = $this->getMockBuilder('\Box_Request')->getMock();
-        $reqMock->expects($this->atLeastOnce())
-            ->method('getClientAddress')
+        $toolsMock = $this->getMockBuilder('\Box_Tools')->getMock();
+        $toolsMock->expects($this->atLeastOnce())
+            ->method('getIpv4')
             ->willReturn($clientIp);
 
         $di = new \Box_Di();
@@ -199,7 +199,7 @@ class ServiceTest extends \BBTestCase {
                 return $modConfig;
             }
         });
-        $di['request'] = $reqMock;
+        $di['tools'] = $toolsMock;
 
         $boxEventMock = $this->getMockBuilder('\Box_Event')->disableOriginalConstructor()
             ->getMock();
